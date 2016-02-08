@@ -19,12 +19,15 @@ app.get('/todos', function(req, res){
 
 app.get('/todos/:id', function(req, res){
   var todoId = parseInt(req.params.id, 10);
-  var matched;
-  todos.forEach(function (todo){
-    if(todo.id === todoId){
-      matched = todo;
-    }
-  });
+  var matched = _.findWhere(todos, {id:todoId});
+
+  // var matched;
+  // todos.forEach(function (todo){
+  //   if(todo.id === todoId){
+  //     matched = todo;
+  //   }
+  // });
+
 
   if(matched){
     res.json(matched);
@@ -35,6 +38,14 @@ app.get('/todos/:id', function(req, res){
 
 app.post('/todos', function(req, res){
   var body  = req.body;
+
+  body = _.pick(body, 'description', 'completed');
+
+  if(!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0){
+    return res.sendStatus(400);
+  }
+
+  body.description = body.description.trim();
 
   body.id = todoNextid++;
 
