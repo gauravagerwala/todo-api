@@ -66,6 +66,32 @@ app.delete('/todos/:id', function (req, res){
   }
 });
 
+app.put('/todos/:id', function(req, res){
+  var todoId = parseInt(req.params.id);
+  var item = _.findWhere(todos, {id: todoId});
+  var body = _.pick(req.body, 'description', 'completed');
+  var validItem = {};
+  if(!item){
+      return res.status(404).send();
+  }
+
+  if(body.hasOwnProperty('completed') && _.isBoolean(body.completed)){
+    validItem.completed = body.completed;
+  }else if(body.hasOwnProperty('completed')){
+    return res.status(400).send();
+  }
+
+  if(body.hasOwnProperty('description') && _.isString('description') && body.description.trim().length > 0 ){
+    validItem.description = body.description;
+  }else if(body.hasOwnProperty('description')){
+    return res.status(400).send();
+  }
+
+  _.extend(item, validItem);
+  res.json(item);
+
+});
+
 app.listen(PORT, function(){
   console.log('Express listening on port ' + PORT);
 });
