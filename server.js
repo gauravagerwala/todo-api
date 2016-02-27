@@ -48,12 +48,22 @@ app.get('/todos/:id', function(req, res){
   //   }
   // });
 
+  db.todo.findById(todoId).then( function(todo){
+    if(!!todo){
+      res.send(todo.toJSON());
+    }else{
+      res.status(404).send();
+    }
 
-  if(matched){
-    res.json(matched);
-  }else{
-    res.status(404).send();
-  }
+  }).catch(function(e){
+    res.status(500).send();
+  })
+  //
+  // if(matched){
+  //   res.json(matched);
+  // }else{
+  //   res.status(404).send();
+  // }
 });
 
 app.post('/todos', function(req, res){
