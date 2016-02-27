@@ -78,11 +78,14 @@ app.delete('/todos/:id', function (req, res){
     where: {
       id: todoId
     }
-  }).then( function(todo){
-    if(todo == 0){
-      res.status(404).json("Error! No todo found")
-    }
-      res.json(todo);
+  }).then( function(rowsDeleted){
+      if(rowsDeleted == 0){
+        res.status(404).json({
+          error: "No Todo found for id"
+        })
+      }else{
+        res.status(204).send();
+      }
     }, function(e){
     res.status(500).send();
   });
