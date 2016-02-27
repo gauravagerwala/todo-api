@@ -66,12 +66,6 @@ app.post('/todos', function(req, res){
   }
 
   body.description = body.description.trim();
-  //
-  // body.id = todoNextid++;
-  //
-  // todos.push(body);
-  //
-  // res.send(todos);
 
   db.todo.create(body).then( function(todo){
     res.send(todo.toJSON());
