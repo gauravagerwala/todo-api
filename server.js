@@ -59,13 +59,7 @@ app.post('/todos', middleware.requireAuthentication, function(req, res){
 
   body = _.pick(body, 'description', 'completed');
 
-  if(!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0){
-    return res.sendStatus(400);
-  }
-
-  body.description = body.description.trim();
-
-  db.todo.create(body).then( function(todo){
+    db.todo.create(body).then( function(todo){
     res.send(todo.toJSON());
   }).catch( function(e){
     res.status(400).json(e);
